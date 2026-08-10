@@ -500,8 +500,8 @@ mousedown
         (s: State, e: MousePosEvent) => e.apply(s),
         initialState))
  .subscribe(e => {
-   rect.setAttribute('x', String(e.rect.x))
-   rect.setAttribute('y', String(e.rect.y))
+   rect.setAttribute('x', String(e.pos.x))
+   rect.setAttribute('y', String(e.pos.y))
  });
 ```
 
