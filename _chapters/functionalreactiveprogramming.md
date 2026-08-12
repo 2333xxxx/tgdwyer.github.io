@@ -248,7 +248,7 @@ range(start?: number, count?: number): Observable<number>
 fromEvent<T>(target: FromEventTarget<T>, eventName: string): Observable<T>
 
 // produces a stream of increasing numbers, emitted every “period” milliseconds
-// emits the first event immediately
+// emits the first event after the first period has elapsed
 interval(period?: number): Observable<number>
 
 // after given initial delay, emit numbers in sequence every specified duration
