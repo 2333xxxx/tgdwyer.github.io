@@ -815,7 +815,7 @@ This definition takes a single parameter a and returns a function. This function
 
 ```haskell
 pure :: a -> (r -> a)
-pure a _ = -> a
+pure a _ = a
 ```
 
 The function `pure` helps you create a function that, no matter what the second input is, will always return this first value, this is exactly the K-combinator.
@@ -868,7 +868,7 @@ apply f = f <*> id
 This will allow us to make more functions point-free
 
 ```haskell
-square :: Num a => a => a
+square :: Num a => a -> a
 square a = a * a
 ```
 
@@ -1076,7 +1076,8 @@ instance Functor Parser where
         Just (rest, result) -> Just (rest, f result)
         _ -> Nothing
 ```
-These definition is a bit tedious.  We have to explicitly run the parser and unbox the result of the given parser (but only if it succeeds), in order to apply the function f to the result.
+
+This definition is a bit tedious.  We have to explicitly run the parser and unbox the result of the given parser (but only if it succeeds), in order to apply the function f to the result.
 
 If we take advantage of the fact that everything buried away inside the `Parser` is also an instance `Functor`, we can have a much simpler definition of `fmap` for `Parser`:
 
@@ -1218,7 +1219,7 @@ So for the applicative instance, the LHS will be the `charPairParser` and the RH
 That is, the first step in applicative parsing is to parse the input `i` using the LHS parser, which is what we called here `charPairParser`.
 This will match the `Just (r1, p1)` case where it will be equal to `Just ("12345b", ('a',))`. Therefore, `r1` is equal to the unparsed portion of the input `12345b` and the result is a tuple partially applied `('a', )`.
 
-We then run the second parser `int` on the remaining input `"12345b"`. This will match the `Just (r2, p2)` case where it will be equal to `Just ("b", 12345)`, where `r2` is equal to the remaining input `"b"` and `p2` is equal to `"12345"`
+We then run the second parser `int` on the remaining input `"12345b"`. This will match the `Just (r2, p2)` case where it will be equal to `Just ("b", 12345)`, where `r2` is equal to the remaining input `"b"` and `p2` is equal to `12345`
 
 We then return `Just (r2, p1 p2)`, which will evaluate to `Just ("b", ('a',12345))`.
 
@@ -1310,7 +1311,7 @@ So in this scenario, our function `f` is `(\a b -> a)` and our `(Parser p)` is t
 
 Therefore, `(\a b -> a) <$> int` will result in `Just ("+", (\a b -> a) 123)`
 
-Now, we want need to consider the second half, which is
+Now, we need to consider the second half, which is
 
 `Just ("+", (\a b -> a) 123)` being applied to `(is '+')`
 
