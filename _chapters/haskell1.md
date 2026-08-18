@@ -157,7 +157,7 @@ The default Haskell lists are cons lists (linked lists defined with a `cons` fun
 
 ```haskell
 []           -- an empty list
-[1,2,3,4]    -- a simple lists of values
+[1,2,3,4]    -- a simple list of values
 [1..4]       -- ==[1,2,3,4] (..) is range operator
 1:[2,3,4]    -- ==[1,2,3,4], use `:` to “cons” an element to the start of a list
 1:2:3:[4]    -- ==[1,2,3,4], you can chain `:`
@@ -243,11 +243,14 @@ Note that our "Hello world!" function to recursively compute the $n^\text{th}$ F
 ```haskell
 lazyFibs = 1 : 1 : zipWith (+) lazyFibs (tail lazyFibs)
 ```
+
 We can then create as much of the list as we need:
+
 ```haskell
 take 10 lazyFibs
 [1,1,2,3,5,8,13,21,34,55]
 ```
+
 This works (as opposed to the recursive definition of `lazyFibs` causing an infinite loop) because Haskell's lazy evaluation only forces evaluation of as much of the list as absolutely necessary, e.g. to output the result of `take 10`.
 ![Deck Observable Visualised](/assets/images/chapterImages/haskell1/zip.gif)
 
@@ -413,7 +416,7 @@ fibs n = fibs (n-1) + fibs (n-2)
 if <condition> then <case 1> else <case 2>
 ```
 
-just like JavaScript’s ternary if operator: `<condition> ? <case 1> : <case 3>`
+just like JavaScript’s ternary if operator: `<condition> ? <case 1> : <case 2>`
 
 ```haskell
 fibs n = if n == 0 then 1 else if n == 1 then 1 else fibs (n-1) + fibs (n-2)
