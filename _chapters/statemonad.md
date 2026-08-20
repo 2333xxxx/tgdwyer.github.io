@@ -113,17 +113,18 @@ fmap f r = Rand $ (f <$>)<$> next r
 ## Applicative
 
 ```haskell
-pure :: a -> Rand a
-pure x = Rand (,x) -- Return the input seed and the value
+instance Applicative Rand where
+  pure :: a -> Rand a
+  pure x = Rand (,x) -- Return the input seed and the value
 
 
-(<*>) :: Rand (a -> b) -> Rand a -> Rand b
-left <*> right = Rand h
-where
-    h s = (s'', f v) -- Need to return a function of type (Seed -> (Seed, Value))
+  (<*>) :: Rand (a -> b) -> Rand a -> Rand b
+  left <*> right = Rand h
     where
-        (s', f) = next left s   -- Get the next seed and function from the left Rand
-        (s'', v) = next right s' -- Get the next seed and value from the right Rand
+      h s = (s'', f v) -- Need to return a function of type (Seed -> (Seed, Value))
+        where
+          (s', f) = next left s   -- Get the next seed and function from the left Rand
+          (s'', v) = next right s' -- Get the next seed and value from the right Rand
 ```
 
 `<*>` constructs a new Rand value Rand h by:
@@ -256,7 +257,7 @@ rollDie = do
   pure (genRand 1 6 s) -- computes a random number and puts back in the context
 ```
 
-We can also write this using bind notation, where we `modify nextSeed` to update the seed. We then use `>>` to ignore the result (i.e., the `()`). We use get to put the seed as the value, which is then binded on to `s` and used to generate a random number. We then use pure to update the value, the seed updating is handled by our bind!
+We can also write this using bind notation, where we `modify nextSeed` to update the seed. We then use `>>` to ignore the result (i.e., the `()`). We use get to put the seed as the value, which is then bound on to `s` and used to generate a random number. We then use pure to update the value, the seed updating is handled by our bind!
 
 ```haskell
 rollDie :: Rand Int

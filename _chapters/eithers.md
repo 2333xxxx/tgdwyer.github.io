@@ -27,7 +27,7 @@ The `Left`/`Right` convention is also more general than a `Success`/`Error` nami
 
 ## Usage of Either
 
-We can use `Either` to help us with error catching, similar to a `Maybe` type. However, the error case has a value rather than `Nothing`, allowing to store an error message to give information to the programmer/user.
+We can use `Either` to help us with error catching, similar to a `Maybe` type. However, the error case has a value rather than `Nothing`, allowing us to store an error message to give information to the programmer/user.
 
 ```haskell
 divide :: Double -> Double -> Either String Double
