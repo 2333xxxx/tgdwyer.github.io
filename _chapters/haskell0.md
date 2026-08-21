@@ -19,7 +19,7 @@ We will use [GHCup](https://www.haskell.org/ghcup/) to install and manage our to
 
 Run this command in a PowerShell session:
 
-``` ps1
+```ps1
 Set-ExecutionPolicy Bypass -Scope Process -Force;[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; try { & ([ScriptBlock]::Create((Invoke-WebRequest https://www.haskell.org/ghcup/sh/bootstrap-haskell.ps1 -UseBasicParsing))) -Interactive -DisableCurl -Minimal } catch { Write-Error $_ }
 ```
 
@@ -53,7 +53,7 @@ Do you want GHCup to install a default MSys2 toolchain (recommended)?
 
 Run
 
-``` sh
+```sh
 ghcup --version
 ```
 
@@ -72,7 +72,7 @@ echo 'export PATH="$HOME/.ghcup/bin:$PATH"' >> ~/.zshrc
 
 If not, run this command in a terminal:
 
-``` sh
+```sh
 export BOOTSTRAP_HASKELL_MINIMAL=1 && curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 ```
 
@@ -88,7 +88,7 @@ A
 
 Run
 
-``` sh
+```sh
 ghcup --version
 ```
 
@@ -97,103 +97,73 @@ your terminal first.
 
 ## Install tools using GHCup
 
-We will be installing the following tools:
+We will be installing several tools.
+Run each of these commands in a terminal:
 
-- Stack: 3.7.1
-- HLS: 2.11.0.0
-
-To do this, run
-
-``` sh
-ghcup install stack 3.7.1 --set
-ghcup install hls 2.11.0.0 --set
+```sh
+ghcup config add-release-channel 3rdparty
+ghcup install ghc 9.10.3 --set
+ghcup install hls 2.14.0.0 --set
+ghcup install stack 3.11.1 --set
+ghcup install fourmolu 0.20.0.0 --set
+ghcup install hlint 3.10 --set
+stack config set snapshot lts-24.44
+stack config set system-ghc --global true
 ```
 
-Alternatively, GHCup comes with a convenient TUI (terminal user interface):
+## Check Setup
 
-``` sh
-ghcup tui
-```
+Run:
 
-Follow the instructions of the TUI to install (`i`) Stack and HLS and
-set (`s`) their versions to 3.7.1 and 2.11.0.0 respectively. Once this
-is done, you should see something like
-
-```none
-┌──────────────────────────────────GHCup──────────────────────────────────┐
-│    Tool  Version         Tags                          Notes            │
-│─────────────────────────────────────────────────────────────────────────│
-│✔✔  GHCup 0.1.50.2    latest,recommended                                 │
-│─────────────────────────────────────────────────────────────────────────│
-│✔✔  Stack 3.7.1       latest                                             │
-│✗   Stack 3.5.1                                                          │
-│✗   Stack 3.3.1       recommended                                        │
-│✗   Stack 3.1.1                                                          │
-│✗   Stack 2.15.7                                                         │
-│─────────────────────────────────────────────────────────────────────────│
-│✔✔  HLS   2.11.0.0    latest                                             │
-│✗   HLS   2.10.0.0    recommended                                        │
-│✗   HLS   2.9.0.1                                                        │
-│✗   HLS   2.9.0.0                                                        │
-│✗   HLS   2.8.0.0                                                        │
-│✗   HLS   2.7.0.0                                                        │
-│✗   HLS   2.6.0.0                                                        │
-│─────────────────────────────────────────────────────────────────────────│
-```
-
-If you only see 1 tick `✔` instead of 2 ticks `✔✔`, that means you have installed the tool but it is not set as your current/active version of that tool. To fix this, select the version and press `s` to set it.
-
-## Check installation
-
-Open the Haskell code bundle and run the following:
-
-``` sh
+```sh
 stack setup
 ```
 
-This normally takes a long time as Stack has to install GHC (the Haskell compiler). This command only needs to be run once in this unit: there’s no need to re-run it for each week’s applied exercises.
+which should print something similar to this:
 
-Once this is done, you can run the following to verify everything is installed correctly:
+```none
+Stack will use the GHC on your PATH. For more information on paths, see stack path and stack exec env. To use this GHC and packages outside of a project, consider using: stack ghc, stack ghci, stack runghc, or stack exec.
+```
 
-``` sh
+Stack should **not** redownload GHC (like below).
+If this appears, **stop** the command (Ctrl+C) and make sure you have [run all the commands](#install-tools-using-ghcup) successfully.
+
+```none
+Preparing to install GHC (tinfo6) to an isolated location. This will not interfere with any system-level installation.
+ghc-tinfo6-9.10.3: download has begun
+```
+
+Also run the following to check that setup worked:
+
+```sh
 stack ghc -- --version
 ```
 
-which should output
+which should output (again without trying to download anything):
 
 ```none
-The Glorious Glasgow Haskell Compilation System, version 9.8.4
+The Glorious Glasgow Haskell Compilation System, version 9.10.3
 ```
-
-This may download any missing dependencies.
 
 ## VS Code Setup
 
-Install the [Haskell extension](https://marketplace.visualstudio.com/items?itemName=haskell.haskell). This provides Haskell language support including language server, syntax highlighting, and linting.
+Install the [Haskell extension](https://marketplace.visualstudio.com/items?itemName=haskell.haskell) and [Haskell linting extension](https://marketplace.visualstudio.com/items?itemName=hoovercj.haskell-linter).
+These provide Haskell language support including language server, syntax highlighting, and linting.
 
-If you are asked
+You can alternatively install these extensions through the command line by running:
+
+```sh
+code --install-extension haskell.haskell hoovercj.haskell-linter
+```
+
+When you open VS Code, if you are asked
 
 > How do you want the extension to manage/discover HLS and the relevant toolchain?
 
-select the ‘Manually via PATH’ option. This corresponds to the ‘Haskell: Manage HLS’ option in VS Code, which should be set to `PATH` (`"haskell.manageHLS": "PATH"`).
+select the 'Manually via PATH' option (**not** the recommended option).
+This corresponds to the 'Haskell: Manage HLS' option in VS Code, which should be set to `PATH` (`"haskell.manageHLS": "PATH"`).
 
-### Optional Extras
-
-These may take a while to install, so if you’re installing Haskell during your applied class, it is worth getting started on your applied session work instead.
-
-- Formatter: [Fourmolu](https://github.com/fourmolu/fourmolu)
-  - Install with `stack install fourmolu`
-  - Set the ‘Haskell: Formatting Provider’ (`haskell.formattingProvider`) setting in VS Code to ‘fourmolu’
-
-- Linter: [hlint](https://github.com/ndmitchell/hlint)
-  - Install with `stack install hlint`
-  - Ensure the ‘Haskell › Plugin › Hlint: Diagnostics On’ (`haskell.plugin.hlint.diagnosticsOn`) setting in VS Code is enabled, which should be the default
-
-If you get an error relating to mismatched versions, try running this first:
-
-```sh
-stack config set snapshot lts-23.25
-```
+Also set the 'Haskell: Formatting Provider' (`haskell.formattingProvider`) setting in VS Code to 'fourmolu'.
 
 ## Troubleshooting
 
@@ -233,15 +203,15 @@ or if it says
 It contains at least one non-ISO/IEC 8859-1 (Latin-1) character (Unicode code point > 255). This will cause problems with packages that build using the hsc2hs tool with its default template template-hsc.h.
 ```
 
-you need to change the `local-programs-path` Stack configuration option. To do this, edit `%AppData%\stack\config.yaml` (by default it will be something like `C:\Users\Your Name\AppData\Roaming\stack\config.yaml`).  You can also do this by running the command
+you need to change the `local-programs-path` Stack configuration option. To do this, edit `%AppData%\stack\config.yaml` (by default it will be something like `C:\Users\Your Name\AppData\Roaming\stack\config.yaml`). You can also do this by running the command
 
-``` ps1
+```ps1
 notepad.exe $(stack path --global-config)
 ```
 
 Add the following line to the bottom of the file:
 
-``` yml
+```yml
 local-programs-path: C:\stack-programs
 ```
 
@@ -251,15 +221,15 @@ If the script exits without installing anything, you might need to disable any t
 
 ### macOS Issues
 
-If you get an error that looks something like `fatal error: 'ffi.h'`, it may be because you do not have the Xcode command line tools installed.  (These are a collection of command line utilities and other developer tools that many programs rely on.) You can install them by running the following command in your terminal:
+If you get an error that looks something like `fatal error: 'ffi.h'`, it may be because you do not have the Xcode command line tools installed. (These are a collection of command line utilities and other developer tools that many programs rely on.) You can install them by running the following command in your terminal:
 
-``` sh
+```sh
 xcode-select --install
 ```
 
 If you have an existing (possibly broken) installation, you might need to get rid of it first:
 
-``` sh
+```sh
 sudo rm -rf /Library/Developer/CommandLineTools
 ```
 
