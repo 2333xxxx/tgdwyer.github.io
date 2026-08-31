@@ -40,32 +40,8 @@ stack ghci fibs.hs
 <div class="alert-box alert-warning" markdown="1">
 **`stack ghci` vs `ghci`**
 
-If you followed our [Haskell installation instructions](/haskell0), you will not have GHC installed globally, and will need to run `stack ghci` instead of just `ghci` on its own. This should work if you run the command from inside the folder for the applied exercises. If you run it outside of the folder, you might get this message:
-
-```none
-Writing the configuration file for the implicit global project to:
-/Users/username/.stack/global-project/stack.yaml. Note: You can change the snapshot via
-the snapshot key there.
-Using the latest snapshot lts-24.7.
-
-Error: [S-6362]
-       No compiler found, expected minor version match with ghc-9.10.2 (aarch64) (based
-       on the configuration in /Users/username/.stack/global-project/stack.yaml).
-
-       To install the correct version of GHC into the subdirectory for the specified
-       platform in Stack's directory for local tools
-       (/Users/username/.stack/programs/aarch64-osx/), try running stack setup or use
-       the --install-ghc flag. To use your system GHC installation, run stack config set
-       system-ghc --global true, or use the --system-ghc flag.
-```
-
-To fix this, run
-
-```sh
-stack config set snapshot lts-23.25
-```
-
-and then run `stack setup`.
+If you followed our [Haskell installation instructions](/haskell0), you have GHC installed globally, so `stack ghci` and `ghci` should do the same thing when playing around with basic Haskell, like we do here.
+When running in a Haskell project, `stack ghci` can load a project automatically though, so we generally recommend sticking with `stack ghci`.
 
 If you are working in an Ed workspace (e.g. for workshops), Stack is not installed, so you will need to run `ghci` instead of `stack ghci`.
 </div>
@@ -114,7 +90,7 @@ if fibs 6 == 13 then "yes" else "no"
 if fibs 6 == 13 && fibs 7 == 12 then "yes" else "no"
 ```
 
->"no"
+> "no"
 
 GHCi also has a number of non-Haskell commands you can enter from the prompt, which are prefixed by `:`.
 You can reload your .hs file into GHCi after an edit with `:r`.  Type `:h` for help.
