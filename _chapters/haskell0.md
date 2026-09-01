@@ -101,14 +101,19 @@ We will be installing several tools.
 Run each of these commands in a terminal:
 
 ```sh
-ghcup config add-release-channel 3rdparty
 ghcup install ghc 9.10.3 --set
 ghcup install hls 2.14.0.0 --set
 ghcup install stack 3.11.1 --set
-ghcup install fourmolu 0.20.0.0 --set
-ghcup install hlint 3.10 --set
 stack config set snapshot lts-24.44
 stack config set system-ghc --global true
+```
+
+optionally, if they are available for your platform the formatter and linter for Haskell code may be useful:
+
+```sh
+ghcup config add-release-channel 3rdparty
+ghcup install fourmolu 0.20.0.0 --set
+ghcup install hlint 3.10 --set
 ```
 
 ## Check Setup
